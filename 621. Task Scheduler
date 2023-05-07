@@ -1,0 +1,27 @@
+//The easist solution -- mathematical method
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        int len = tasks.length;
+        int[] count = new int[26];
+        for(char t: tasks){
+            count[t - 'A']++;
+        }
+
+        Arrays.sort(count);
+        int maxFreq = count[25];
+        int maxCount = 0;
+
+        for(int i = 25; i>0; i--){
+            if(count[i] == maxFreq ){
+                maxCount++;
+            }
+            if(count[i] != maxFreq || count[i] != count[i - 1]){
+                break;
+            }
+        } 
+
+        return Math.max(len, (n+1) * (maxFreq - 1) + maxCount);
+
+
+    }
+}
