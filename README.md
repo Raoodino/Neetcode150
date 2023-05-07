@@ -1,2 +1,2 @@
 # Neetcode160
-## The solution for Neetocde 150 https://neetcode.io/practice, optimize time by time.
+## My solution for Neetcode 150 https://neetcode.io/practice, optimize time by time.
