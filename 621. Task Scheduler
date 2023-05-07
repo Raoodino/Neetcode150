@@ -1,4 +1,5 @@
 //The easist solution -- mathematical method
+//https://leetcode.com/problems/task-scheduler/description/
 class Solution {
     public int leastInterval(char[] tasks, int n) {
         int len = tasks.length;
