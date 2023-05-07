@@ -26,3 +26,49 @@ class Solution {
 
     }
 }
+
+//using max-heap
+//https://leetcode.com/problems/task-scheduler/submissions/946274771/
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        //use a map to store the task and its frequency
+        Map<Character, Integer> freqMap = new HashMap<>();
+        for(char c: tasks){
+            freqMap.put(c, freqMap.getOrDefault(c, 0) + 1);
+        }
+        //use a maxheap to store tasks by frequency
+        Queue<Map.Entry<Character, Integer>> pq = new PriorityQueue<>((o1,o2) -> (o2.getValue() - o1.getValue()));
+        //add all map entry into the priority queue
+        pq.addAll(freqMap.entrySet());
+        // count the number of units of times
+        int count = 0;
+        //regard n+1 tasks as a group
+        while(!pq.isEmpty()){
+            int k = n + 1;
+            List<Map.Entry> tmpList = new ArrayList<>();
+            while( k > 0 && !pq.isEmpty()){
+                Map.Entry<Character, Integer> top = pq.poll();
+                top.setValue(top.getValue() - 1);
+                tmpList.add(top);
+                k--;
+                count++;
+            }
+
+            for(Map.Entry<Character, Integer> m: tmpList){
+                if(m.getValue() > 0)
+                pq.offer(m);
+            }
+            //if pq is empty, then break;
+            if(pq.isEmpty()){
+                break;
+            }
+            //if k is not zero, then 'idle' 
+            if(k > 0){
+                count = count + k;
+            }
+
+        }
+        return count;
+
+    }
+}
