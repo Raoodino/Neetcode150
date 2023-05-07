@@ -1,5 +1,5 @@
 //The easist solution -- mathematical method
-//https://leetcode.com/problems/task-scheduler/description/
+//https://leetcode.com/problems/task-scheduler/submissions/946264856/
 class Solution {
     public int leastInterval(char[] tasks, int n) {
         int len = tasks.length;
