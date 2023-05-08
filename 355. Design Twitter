@@ -1,0 +1,126 @@
+//https://leetcode.com/problems/design-twitter/submissions/946324961/
+
+class Twitter {
+        //A map of a person and the people he is following
+        private Map<Integer, Set<Integer>> followerMap;
+
+        //A map of userId and its tweets
+        private Map<Integer, Tweet> twitterMap;
+
+        //global variable of timestamp
+        private static int timestamp = 0;
+        
+
+    public Twitter() {
+        //initiate
+        followerMap = new HashMap<>();
+        twitterMap = new HashMap<>();
+    }
+    
+    public void postTweet(int userId, int tweetId) {
+        timestamp++;
+        if(twitterMap.containsKey(userId)){
+            Tweet oldtweet = twitterMap.get(userId);
+            Tweet newtweet = new Tweet(tweetId, timestamp);
+            newtweet.next = oldtweet;
+            twitterMap.put(userId, newtweet);
+        } else{
+            twitterMap.put(userId, new Tweet(tweetId, timestamp));
+        }
+    }
+    
+    public List<Integer> getNewsFeed(int userId) {
+        //create a maxHeap with the most recent tweet at the top if the queue
+        PriorityQueue<Tweet> maxHeap = new PriorityQueue<>((o1, o2) -> o2.timestamp - o1.timestamp);
+        //first count this person's tweet
+        if(twitterMap.containsKey(userId)){
+            maxHeap.offer(twitterMap.get(userId));
+        }
+
+        Set<Integer> followingList = followerMap.get(userId);
+        //then count its followed people's tweet
+        if(followingList!=null && followingList.size() > 0){
+            for(int followingId: followingList){
+                //since a person may not post any tweet, it is possible to be null
+                Tweet tweets = twitterMap.get(followingId);
+                //if it is not null then add
+                if(tweets !=null ){
+                    maxHeap.offer(tweets);
+                }
+                
+            }
+        }
+        //get the 10 most recent tweet from the maxHeap
+        List<Integer> res = new ArrayList<>(10);
+        int count = 0;
+        while(!maxHeap.isEmpty() && count < 10){
+            Tweet top = maxHeap.poll();
+            //add the id to the result
+            res.add(top.id);
+            //the same person's previous tweet
+            if(top.next!=null){
+                maxHeap.offer(top.next);
+            }
+            count++;
+        }
+        return res; 
+    }
+    
+    public void follow(int followerId, int followeeId) {
+        //special case
+        if(followerId == followeeId){
+            return;
+        }
+        Set<Integer> followingList = followerMap.get(followerId);
+        if(followingList == null){
+            Set<Integer> newList = new HashSet<>();
+            newList.add(followeeId);
+            followerMap.put(followerId,newList);
+        } else{
+            if(followingList.contains(followeeId)){
+                return;
+            }
+            followingList.add(followeeId);
+        }
+
+    }
+    
+    public void unfollow(int followerId, int followeeId) {
+        //special case
+        if(followerId == followeeId){
+            return;
+        }
+        Set<Integer> followingList = followerMap.get(followerId);
+        if(followingList == null){
+            return;
+        } 
+
+        followingList.remove(followeeId);
+        
+
+    }
+
+    //nested tweet class
+    private class Tweet{
+        private int id;
+        private int timestamp;
+        //the tweet is a singly linkedlist and has next node
+        //eg. a user's new tweet points to previous tweet
+        private Tweet next;
+
+        public Tweet(int tweetId, int time){
+            id = tweetId;
+            timestamp = time;
+        }
+
+    }
+}
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter obj = new Twitter();
+ * obj.postTweet(userId,tweetId);
+ * List<Integer> param_2 = obj.getNewsFeed(userId);
+ * obj.follow(followerId,followeeId);
+ * obj.unfollow(followerId,followeeId);
+ */
