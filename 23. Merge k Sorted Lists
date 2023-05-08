@@ -34,3 +34,62 @@ class Solution {
         
     }
 }
+
+
+// beat 100% -- partition
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        return merge(lists, 0, lists.length - 1);
+
+        
+    }
+    //private helper method to merge a list
+    public ListNode merge(ListNode[] lists, int l, int r){
+        if(l == r){
+            return lists[l];
+        }
+        if(l > r){
+            return null;
+        }
+        int mid = l+(r-l)/2;
+        ListNode left = merge(lists, l, mid);
+        ListNode right = merge(lists, mid+1, r);
+        ListNode newHead = mergeTwoList(left, right);
+        return newHead;
+
+    }
+    //private helper method to merge two lists
+    private ListNode mergeTwoList(ListNode a, ListNode b){
+        if(a == null || b == null){
+            return a == null?b: a;
+        }
+
+        ListNode head = new ListNode(0);
+        ListNode cur = head;
+        ListNode la = a;
+        ListNode lb = b;
+        while(la!=null && lb!=null){
+            if(la.val<lb.val){
+                cur.next = la;
+                la = la.next;
+            } else{
+                cur.next = lb;
+                lb = lb.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = la!=null?la:lb;
+        return head.next;
+    }
+}
