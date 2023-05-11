@@ -1,0 +1,28 @@
+//https://leetcode.com/problems/partition-labels/submissions/948189996/
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        int len = s.length();
+        int[] count = new int[26];
+        List<Integer> result= new ArrayList<>();
+        for(int i = 0; i<len; i++){
+            //update each letter's end position
+            count[s.charAt(i) - 'a'] = i;
+        }
+        int start = 0;
+        int end = 0;
+        for(int i=0; i<len; i++){
+            //find the furthest end position
+            end = Math.max(end,count[s.charAt(i) - 'a']);
+            //update the partition and start point
+            if(i == end){
+                int partition = end - start + 1;
+                result.add(partition);
+                //a new start point
+                start = end + 1;
+            }
+        }
+        return result;
+
+        
+    }
+}
