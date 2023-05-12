@@ -1,0 +1,32 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        if(n<=0){
+            return result;
+        }
+        //open: 0  close: 0
+        dfs(n, "", result, 0, 0);
+        return result;
+        
+    }
+
+    private void dfs(int n, String path, List<String> result, int open, int close){
+        //cut-edge strategy:
+        //1. close > open -- cut
+        //2. open > n
+        if(open > n){
+            return;
+        }
+        if(close > open){
+            return;
+        }
+        //add to the result
+        if(path.length() == 2*n){
+            result.add(path);
+            return;
+        }
+
+        dfs(n, path + "(", result, open + 1, close);
+        dfs(n, path + ")", result, open, close + 1);
+    }
+}
