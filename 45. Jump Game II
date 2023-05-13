@@ -1,0 +1,22 @@
+//i < nums.length-1
+//since at the begining, the border equals to i, so the step is already 1
+class Solution {
+    public int jump(int[] nums) {
+        //the border
+        int border = 0;
+        //the maximum range
+        int maxReach = 0;
+        //count the steps
+        int step = 0;
+        //traverse
+        for(int i=0; i<nums.length - 1; i++){
+            maxReach = Math.max(maxReach, nums[i] + i);
+            if(i == border){
+                border = maxReach;
+                step++;
+            }
+
+        }
+        return step;
+    }
+}
