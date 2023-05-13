@@ -1,0 +1,32 @@
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        if(hand.length % groupSize !=0){
+            return false;
+        }
+        Map<Integer,Integer> numsMap = new HashMap<>();
+        Queue<Integer> queue = new PriorityQueue<>();
+        for(int h:hand){
+            numsMap.put(h, numsMap.getOrDefault(h,0)+1);
+            queue.offer(h);
+        }
+        while(!queue.isEmpty()){
+            int head = queue.poll();
+            //if the number already used, then continue
+            if(numsMap.get(head) == 0){
+                continue;
+            }
+            for(int i=head; i<head+groupSize; i++){
+                //if the number head+groupSize does not exist
+                //or it has turned to zeron
+                //then return false
+                int cnt = numsMap.getOrDefault(i,0);
+                if(cnt == 0){
+                    return false;
+                }
+                numsMap.put(i, cnt-1);
+            }
+        }
+        return true; 
+
+    }
+}
