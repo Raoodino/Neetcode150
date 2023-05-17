@@ -1,0 +1,28 @@
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int len = heights.length;
+        int[] newHeights = new int[len+2];
+        System.arraycopy(heights, 0, newHeights, 1, len);
+        Stack<Integer> s = new Stack<>();
+        s.push(0);
+        int max = 0;
+        for(int i = 1; i<newHeights.length; i++){
+            //the stack is ascending: 1, 5, 6
+            while(newHeights[s.peek()] > newHeights[i]){
+                //the height
+                int h = newHeights[s.pop()];
+                //the nearest position that is less than the current value
+                int j = s.peek();
+                //eg. 5, i=4, j=1
+                int area = h * (i - j - 1);
+                max = Math.max(max, area);
+
+            }
+            
+            s.push(i);
+        }
+        return max;
+
+        
+    }
+}
