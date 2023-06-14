@@ -1,0 +1,46 @@
+class Solution {
+    public int minDistance(String word1, String word2) {
+
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m+1][n+1];
+        //dp[i][j] : minimum number of operations to convert word1. substring[0, i] to word2.substring [0, j]
+
+        //add all
+        for(int j=1; j<=n; j++){
+            dp[0][j] = dp[0][j-1] + 1;
+        }
+        //delete all
+        for(int i=1; i<=m; i++){
+            dp[i][0] = dp[i-1][0] + 1;
+        }
+
+        for(int i=1; i<=m; i++){
+            for(int j=1; j<=n; j++){
+                //insert
+                //word1: [0...i] same as word2: [0...j-1]
+                //add one character to word1
+                // dp[i][j] = dp[i][j-1] + 1;
+                //delete
+                //word1: [0...i-1] same as word2[0...j]
+                //need to delete one character
+                // dp[i][j] = dp[i-1][j] + 1;
+                //replace
+                //word1:[0...i-1] same as word2[0...j-1]
+                //need to replace one character
+                // dp[i][j] = dp[i-1][j-1] + 1;
+
+                //if the index[i] and index[j] is the same
+                //just refer to its former one
+                if(word1.charAt(i-1) == word2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1];
+                } else{
+                    dp[i][j] = Math.min(Math.min(dp[i-1][j-1], dp[i][j-1]), dp[i-1][j]) + 1;
+                }
+            }
+        }
+        return dp[m][n];
+        
+    }
+}
+
