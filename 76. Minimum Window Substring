@@ -1,0 +1,53 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        //similar to leetcode 567
+        Map<Character, Integer> window = new HashMap<>();
+        Map<Character, Integer> need = new HashMap<>();
+        //store String t in the hashMap
+        for(char c : t.toCharArray()){
+            need.put(c, need.getOrDefault(c, 0) + 1);
+        }
+        //calculate the length of the window
+        //and valid numbers in the window
+        //the border of the window
+        int left = 0;
+        int right = 0;
+        int valid = 0;
+        //the start index of the substring
+        int start = 0;
+        //the length of the substring
+        int len = Integer.MAX_VALUE;
+
+        //traverse the longer Input string, set the window on this string
+        //decide the right border
+        while(right < s.length()){
+            char c = s.charAt(right);
+            //expand the window's right border
+            right++;
+            if(need.containsKey(c)){
+                window.put(c, window.getOrDefault(c, 0) + 1);
+                if(need.get(c).equals(window.get(c))){
+                    valid++;
+                }
+            }
+            //decide whether the left border needs shrink
+            while(valid == need.size()){
+                //update the substring
+                if(right - left < len){
+                    start = left;
+                    len = right - left;
+                }
+                char d = s.charAt(left);
+                left++;
+                if(need.containsKey(d)){
+                    if(need.get(d).equals(window.get(d))){
+                        valid--;
+                    }
+                    window.put(d, window.get(d) - 1);
+                }
+            }
+        }
+        return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
+
+    }
+}
