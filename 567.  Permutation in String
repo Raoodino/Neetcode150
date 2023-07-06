@@ -1,0 +1,49 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+         //similar to leetcode 76
+        Map<Character, Integer> window = new HashMap<>();
+        Map<Character, Integer> need = new HashMap<>();
+        //store String s1 in the hashMap named 'need''
+        for(char c : s1.toCharArray()){
+            need.put(c, need.getOrDefault(c, 0) + 1);
+        }
+        //calculate the length of the window
+        //and valid numbers in the window
+        //the border of the window
+        int left = 0;
+        int right = 0;
+        int valid = 0;
+
+        //traverse the longer Input string, set the window on this string
+        //decide the right border
+        while(right < s2.length()){
+            char c = s2.charAt(right);
+            //expand the window's right border
+            right++;
+            if(need.containsKey(c)){
+                window.put(c, window.getOrDefault(c, 0) + 1);
+                if(need.get(c).equals(window.get(c))){
+                    valid++;
+                }
+            }
+            //decide whether the left border needs shrink
+            while(right - left >= s1.length()){
+                if(valid == need.size()){
+                    return true;
+                }
+            
+                char d = s2.charAt(left);
+                left++;
+                if(need.containsKey(d)){
+                    if(need.get(d).equals(window.get(d))){
+                        valid--;
+                    }
+                    window.put(d, window.get(d) - 1);
+                }
+            }
+        }
+        return false;
+
+
+    }
+}
